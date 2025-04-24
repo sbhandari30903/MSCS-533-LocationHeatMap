@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:LocationHeatMap.Controls"
+             xmlns:viewmodels="clr-namespace:LocationHeatMap.ViewModels"
+             x:DataType="viewmodels:MainViewModel"
+             x:Class="LocationHeatMap.MainPage"
+             Title="Location Heat Map"
+             x:ClassModifier="public">
+    <!-- Added x:ClassModifier -->
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+        <!-- Header with tracking controls -->
+        <HorizontalStackLayout Grid.Row="0" Spacing="10" Padding="10" HorizontalOptions="Center">
+            <Button Text="{Binding TrackingButtonText}" 
+                    Command="{Binding ToggleTrackingCommand}"
+                    BackgroundColor="{Binding IsTracking, Converter={StaticResource BoolToColorConverter}}" />
+            <Button Text="Refresh" Command="{Binding LoadDataCommand}" />
+            <Button Text="Clear Data" Command="{Binding ClearDataCommand}" />
+        </HorizontalStackLayout>
+
+        <!-- Map -->
+        <controls:HeatMapRenderer Grid.Row="1" 
+                                  LocationPoints="{Binding LocationPoints}"
+                                  CurrentRoute="{Binding CurrentRoute}"
+                                  HorizontalOptions="Fill" 
+                                  VerticalOptions="Fill" />
+
+        <!-- Loading indicator -->
+        <ActivityIndicator Grid.Row="1" 
+                          IsRunning="{Binding IsLoading}" 
+                          IsVisible="{Binding IsLoading}"
+                          HorizontalOptions="Center" 
+                          VerticalOptions="Center" />
+
+        <!-- Navigation controls -->
+        <HorizontalStackLayout Grid.Row="2" Spacing="10" Padding="10" HorizontalOptions="Center">
+            <Button Text="Set Start" Command="{Binding SetStartLocationCommand}" />
+            <Button Text="Set Destination" Command="{Binding SetEndLocationCommand}" />
+            <Button Text="{Binding NavigationButtonText}" 
+                    Command="{Binding ToggleNavigationCommand}"
+                    BackgroundColor="{Binding IsNavigating, Converter={StaticResource BoolToColorConverter}}" />
+        </HorizontalStackLayout>
+
+        <!-- Footer status -->
+        <Label Grid.Row="3" 
+               Text="{Binding LocationPoints.Count, StringFormat='Tracking {0} location points'}" 
+               HorizontalOptions="Center" 
+               Padding="10" />
+    </Grid>
+</ContentPage>
